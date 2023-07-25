@@ -19,7 +19,7 @@
         Outside of the Shadow DOM
     </div>
     <div id="root">
-        <template shadowrootmode="open">
+        <template shadowrootmode="closed">
             <slot></slot>
             <style>
                 div {
@@ -39,7 +39,6 @@
                 const mode = template.getAttribute("shadowrootmode");
                 const shadowRoot = template.parentNode.attachShadow({ mode });
                 shadowRoot.appendChild(template.content);
-                shadowRoot.querySelectorAll("slot").forEach(e => e.remove())
                 template.remove();
                 attachShadowRoots(shadowRoot);
             });
