@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+
+<body>
+    <div>
+        Outside of the Shadow DOM
+    </div>
+    <div id="root">
+        <template shadowrootmode="open">
+            <slot></slot>
+            <style>
+                div {
+                    background-color: red;
+                }
+            </style>
+            <div>
+                <p>Hello world</p>
+            </div>
+        </template>
+    </div>
+
+    <script>
+        // POLYFILL
+        (function attachShadowRoots(root) {
+            root.querySelectorAll("template[shadowrootmode]").forEach(template => {
+                const mode = template.getAttribute("shadowrootmode");
+                const shadowRoot = template.parentNode.attachShadow({ mode });
+                shadowRoot.appendChild(template.content);
+                shadowRoot.querySelectorAll("slot").forEach(e => e.remove())
+                template.remove();
+                attachShadowRoots(shadowRoot);
+            });
+        })(document);
+    </script>
+</body>
+
+</html>
